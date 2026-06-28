@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>GroThing</li>
+    </mods>
+    <match Class="PatchOperationSequence">
+      <operations>
+        <li Class="PatchOperationConditional">
+          <xpath>Defs/ResearchProjectDef[defName="MF_ModernFurniture"]</xpath>
+          <nomatch Class="PatchOperationRemove">
+            <xpath>Defs/ResearchProjectDef[defName="grothingthings"]/prerequisites/li[text()="MF_ModernFurniture"]</xpath>
+          </nomatch>
+        </li>
+      </operations>
+    </match>
+  </Operation>
+</Patch>

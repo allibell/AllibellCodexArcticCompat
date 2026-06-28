@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>AllibellCodex Arctic Compatibility</name>
+  <author>AllibellCodex</author>
+  <packageId>allibellcodex.arcticcompat</packageId>
+  <supportedVersions>
+    <li>1.5</li>
+    <li>1.6</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+    </li>
+    <li>
+      <packageId>rwmt.multiplayer</packageId>
+      <displayName>Multiplayer</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2606448745</steamWorkshopUrl>
+    </li>
+    <li>
+      <packageId>rwmt.multiplayercompatibility</packageId>
+      <displayName>Multiplayer Compatibility</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/1629973374</steamWorkshopUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>rwmt.multiplayer</li>
+    <li>rwmt.multiplayercompatibility</li>
+    <li>atlas.androidtiers</li>
+    <li>vanillaracesexpanded.android</li>
+    <li>dubwise.dubsmintmenus</li>
+    <li>unlimitedhugs.allowtool</li>
+    <li>brrainz.achtung</li>
+    <li>vanillaexpanded.vanillatraitsexpanded</li>
+    <li>dandman.grothingthings</li>
+  </loadAfter>
+  <description>
+Compatibility helper for Allibell's codex_arctic_2 mod list on RimWorld 1.6 multiplayer.
+
+This mod is intentionally separate from the installed Workshop mods. It applies conservative runtime compatibility settings for Android Tiers when enabled, and leaves the source mod files untouched.
+  </description>
+</ModMetaData>
