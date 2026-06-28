@@ -5,18 +5,50 @@ using System.Reflection;
 using HarmonyLib;
 using LudeonTK;
 using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace AllibellCodex.ArcticCompat;
 
+[HarmonyPatch(typeof(DebugTabMenu_Actions), nameof(DebugTabMenu_Actions.InitActions))]
+public static class MultiplayerDevActionsDebugMenuPatch
+{
+    public static void Postfix(DebugActionNode __result)
+    {
+        MultiplayerDevActions.InjectDebugActions(__result);
+    }
+}
+
 public static class MultiplayerDevActions
 {
+    private const string SpawningLabel = "Spawning";
+    private const string SpawnPawnKindLabel = "MP spawn pawn kind";
+
     private static readonly MethodInfo? PostPawnSpawnMethod =
         AccessTools.Method(typeof(DebugToolsSpawning), "PostPawnSpawn");
 
-    [DebugAction("Spawning", "MP spawn pawn kind", allowedGameStates = AllowedGameStates.PlayingOnMap, displayPriority = 1001)]
-    public static List<DebugActionNode> SpawnPawnKind()
+    public static void InjectDebugActions(DebugActionNode root)
+    {
+        if (root?.children == null)
+            return;
+
+        var spawning = root.children.FirstOrDefault(child => child.label == SpawningLabel);
+        if (spawning?.children?.Any(child => child.label == SpawnPawnKindLabel) == true)
+            return;
+
+        if (spawning == null)
+        {
+            spawning = new DebugActionNode(SpawningLabel, DebugActionType.Action, null, null);
+            root.AddChild(spawning);
+        }
+
+        var node = new DebugActionNode(SpawnPawnKindLabel, DebugActionType.Action, null, null)
+        {
+            childGetter = SpawnPawnKind
+        };
+        spawning.AddChild(node);
+    }
+
+    private static List<DebugActionNode> SpawnPawnKind()
     {
         return DefDatabase<PawnKindDef>.AllDefsListForReading
             .Where(kindDef => kindDef.showInDebugSpawner && kindDef.race != null)
@@ -34,7 +66,7 @@ public static class MultiplayerDevActions
             return;
 
         var spawnCell = CellFinder.RandomSpawnCellForPawnNear(cell, map, 4);
-        var pawn = PawnGenerator.GeneratePawn(kindDef, null, map.Tile);
+        var pawn = PawnGenerator.GeneratePawn(kindDef, null);
         GenSpawn.Spawn(pawn, spawnCell, map, WipeMode.Vanish);
         PostPawnSpawnMethod?.Invoke(null, new object[] { pawn });
     }
