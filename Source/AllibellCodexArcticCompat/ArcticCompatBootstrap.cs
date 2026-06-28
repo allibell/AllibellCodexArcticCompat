@@ -18,6 +18,7 @@ public static class ArcticCompatBootstrap
             new Harmony("allibellcodex.arcticcompat").PatchAll();
             RegisterMultiplayerSyncMethods();
             ApplyAndroidTiersMultiplayerSettings();
+            ApplyWinstonWavesCompatibility();
         }
         catch (Exception ex)
         {
@@ -44,21 +45,73 @@ public static class ArcticCompatBootstrap
 
         RegisterSyncMethod(register, typeof(BillSearchDialog), nameof(BillSearchDialog.AddBillSynced));
         RegisterSyncMethod(register, typeof(MultiplayerDevActions), nameof(MultiplayerDevActions.SpawnPawnKindSynced), debugOnly: true);
+        RegisterWinstonWavesSyncMethods(register);
     }
 
     private static void RegisterSyncMethod(MethodInfo register, Type type, string methodName, bool debugOnly = false)
     {
+        if (type.GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance) == null)
+            return;
+
         var args = new object?[register.GetParameters().Length];
         args[0] = type;
         args[1] = methodName;
 
-        var syncMethod = register.Invoke(null, args);
+        object? syncMethod;
+        try
+        {
+            syncMethod = register.Invoke(null, args);
+        }
+        catch (Exception ex)
+        {
+            Log.Warning($"{LogPrefix} Failed to register sync method {type.FullName}.{methodName}: {ex}");
+            return;
+        }
+
         if (!debugOnly || syncMethod == null)
             return;
 
         syncMethod.GetType()
             .GetMethod("SetDebugOnly", BindingFlags.Public | BindingFlags.Instance)
             ?.Invoke(syncMethod, Array.Empty<object>());
+    }
+
+    private static void RegisterWinstonWavesSyncMethods(MethodInfo register)
+    {
+        if (!ModsConfig.IsActive("vanillastorytellersexpanded.winstonwave"))
+            return;
+
+        var debugOptions = Type.GetType("VSEWW.DebugOptions, VSEWW");
+        if (debugOptions != null)
+        {
+            RegisterSyncMethod(register, debugOptions, "AddModifierToWave", debugOnly: true);
+            RegisterSyncMethod(register, debugOptions, "ResetToWaveOne", debugOnly: true);
+            RegisterSyncMethod(register, debugOptions, "ResetWave", debugOnly: true);
+            RegisterSyncMethod(register, debugOptions, "RewardTest", debugOnly: true);
+            RegisterSyncMethod(register, debugOptions, "SendAllReward", debugOnly: true);
+            RegisterSyncMethod(register, debugOptions, "SendWaveNow", debugOnly: true);
+            RegisterSyncMethod(register, debugOptions, "SkipToWave", debugOnly: true);
+        }
+
+        var rewardCreator = Type.GetType("VSEWW.RewardCreator, VSEWW");
+        if (rewardCreator != null)
+            RegisterSyncMethod(register, rewardCreator, "SendReward");
+    }
+
+    private static void ApplyWinstonWavesCompatibility()
+    {
+        if (!ModsConfig.IsActive("vanillastorytellersexpanded.winstonwave"))
+            return;
+
+        var winston = LoadedModManager.RunningModsListForReading
+            .FirstOrDefault(mod => string.Equals(mod.PackageId, "VanillaStorytellersExpanded.WinstonWave", StringComparison.OrdinalIgnoreCase));
+        if (winston?.ModMetaData?.IncompatibleWith == null)
+            return;
+
+        var removed = winston.ModMetaData.IncompatibleWith.RemoveAll(packageId =>
+            string.Equals(packageId, "rwmt.Multiplayer", StringComparison.OrdinalIgnoreCase));
+        if (removed > 0)
+            Log.Message($"{LogPrefix} Removed Winston Waves' stale Multiplayer incompatibility marker.");
     }
 
     private static void ApplyAndroidTiersMultiplayerSettings()
