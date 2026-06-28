@@ -46,6 +46,9 @@ public static class ArcticCompatBootstrap
         RegisterSyncMethod(register, typeof(BillSearchDialog), nameof(BillSearchDialog.AddBillSynced));
         RegisterSyncMethod(register, typeof(MultiplayerDevActions), nameof(MultiplayerDevActions.SpawnPawnKindSynced), debugOnly: true);
         RegisterSyncMethod(register, typeof(MultiplayerDevGizmos), nameof(MultiplayerDevGizmos.ResurrectPawnSynced), debugOnly: true);
+        RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.EnqueueSynced));
+        RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.EnqueueRangeSynced));
+        RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.DequeueSynced));
         RegisterWinstonWavesSyncMethods(register);
     }
 
