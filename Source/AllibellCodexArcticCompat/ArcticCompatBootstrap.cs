@@ -42,10 +42,23 @@ public static class ArcticCompatBootstrap
         if (register == null)
             return;
 
+        RegisterSyncMethod(register, typeof(BillSearchDialog), nameof(BillSearchDialog.AddBillSynced));
+        RegisterSyncMethod(register, typeof(MultiplayerDevActions), nameof(MultiplayerDevActions.SpawnPawnKindSynced), debugOnly: true);
+    }
+
+    private static void RegisterSyncMethod(MethodInfo register, Type type, string methodName, bool debugOnly = false)
+    {
         var args = new object?[register.GetParameters().Length];
-        args[0] = typeof(BillSearchDialog);
-        args[1] = nameof(BillSearchDialog.AddBillSynced);
-        register.Invoke(null, args);
+        args[0] = type;
+        args[1] = methodName;
+
+        var syncMethod = register.Invoke(null, args);
+        if (!debugOnly || syncMethod == null)
+            return;
+
+        syncMethod.GetType()
+            .GetMethod("SetDebugOnly", BindingFlags.Public | BindingFlags.Instance)
+            ?.Invoke(syncMethod, Array.Empty<object>());
     }
 
     private static void ApplyAndroidTiersMultiplayerSettings()

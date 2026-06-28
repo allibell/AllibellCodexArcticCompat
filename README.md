@@ -12,6 +12,7 @@ This mod is built for RimWorld 1.6 and is intentionally separate from installed 
   - `disableLowNetworkMalus = true`
   - `duringSolarFlaresAndroidsShouldBeDowned = false`
 - If GroThing is enabled without Vanilla Furniture Expanded's `MF_ModernFurniture` research project, removes that missing prerequisite from `GroThing Plants` so its research remains usable.
+- Adds a Multiplayer-synced dev mode action at `Spawning > MP spawn pawn kind` for spawning pawns such as huskies without using RimWorld's unsynced vanilla spawn command.
 
 ## Suggested load order
 
