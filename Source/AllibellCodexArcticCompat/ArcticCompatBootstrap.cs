@@ -13,16 +13,21 @@ public static class ArcticCompatBootstrap
 
     static ArcticCompatBootstrap()
     {
+        ApplyStep("Harmony patches", () => new Harmony("allibellcodex.arcticcompat").PatchAll());
+        ApplyStep("multiplayer sync method registration", RegisterMultiplayerSyncMethods);
+        ApplyStep("Android Tiers settings", ApplyAndroidTiersMultiplayerSettings);
+        ApplyStep("Winston Waves compatibility", ApplyWinstonWavesCompatibility);
+    }
+
+    private static void ApplyStep(string name, Action action)
+    {
         try
         {
-            new Harmony("allibellcodex.arcticcompat").PatchAll();
-            RegisterMultiplayerSyncMethods();
-            ApplyAndroidTiersMultiplayerSettings();
-            ApplyWinstonWavesCompatibility();
+            action();
         }
         catch (Exception ex)
         {
-            Log.Warning($"{LogPrefix} Failed while applying compatibility settings: {ex}");
+            Log.Warning($"{LogPrefix} Failed while applying {name}: {ex}");
         }
     }
 

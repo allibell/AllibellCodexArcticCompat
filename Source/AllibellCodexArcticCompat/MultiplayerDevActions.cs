@@ -20,8 +20,23 @@ public static class MultiplayerDevActionsDebugMenuPatch
 
 public static class MultiplayerDevActions
 {
-    private const string SpawningLabel = "Spawning";
+    private const string SpawningCategory = "Spawning";
     private const string SpawnPawnKindLabel = "MP spawn pawn kind";
+
+    private static readonly MethodInfo? GeneratePawnMethod = AccessTools.GetDeclaredMethods(typeof(PawnGenerator))
+        .Where(method => method.Name == nameof(PawnGenerator.GeneratePawn))
+        .Where(method =>
+        {
+            var parameters = method.GetParameters();
+            return parameters.Length >= 2
+                && parameters[0].ParameterType == typeof(PawnKindDef)
+                && parameters[1].ParameterType == typeof(Faction);
+        })
+        .OrderBy(method => method.GetParameters().Length)
+        .FirstOrDefault();
+
+    private static readonly FieldInfo? DefaultFactionTypeField =
+        AccessTools.Field(typeof(PawnKindDef), "defaultFactionType");
 
     private static readonly MethodInfo? PostPawnSpawnMethod =
         AccessTools.Method(typeof(DebugToolsSpawning), "PostPawnSpawn");
@@ -31,29 +46,23 @@ public static class MultiplayerDevActions
         if (root?.children == null)
             return;
 
-        var spawning = root.children.FirstOrDefault(child => child.label == SpawningLabel);
-        if (spawning?.children?.Any(child => child.label == SpawnPawnKindLabel) == true)
+        if (root.children.Any(child => child.label == SpawnPawnKindLabel && child.category == SpawningCategory))
             return;
 
-        if (spawning == null)
+        root.AddChild(new DebugActionNode(SpawnPawnKindLabel, DebugActionType.Action, null, null)
         {
-            spawning = new DebugActionNode(SpawningLabel, DebugActionType.Action, null, null);
-            root.AddChild(spawning);
-        }
-
-        var node = new DebugActionNode(SpawnPawnKindLabel, DebugActionType.Action, null, null)
-        {
+            category = SpawningCategory,
+            displayPriority = 1001,
             childGetter = SpawnPawnKind
-        };
-        spawning.AddChild(node);
+        });
     }
 
     private static List<DebugActionNode> SpawnPawnKind()
     {
         return DefDatabase<PawnKindDef>.AllDefsListForReading
             .Where(kindDef => kindDef.showInDebugSpawner && kindDef.race != null)
-            .OrderBy(kindDef => kindDef.LabelCap.RawText)
-            .Select(kindDef => new DebugActionNode(LabelFor(kindDef), DebugActionType.ToolMap, () =>
+            .OrderBy(kindDef => kindDef.defName)
+            .Select(kindDef => new DebugActionNode(kindDef.defName, DebugActionType.ToolMap, () =>
             {
                 SpawnPawnKindSynced(kindDef, UI.MouseCell(), Find.CurrentMap);
             }, null))
@@ -66,13 +75,44 @@ public static class MultiplayerDevActions
             return;
 
         var spawnCell = CellFinder.RandomSpawnCellForPawnNear(cell, map, 4);
-        var pawn = PawnGenerator.GeneratePawn(kindDef, null);
+        var pawn = GeneratePawn(kindDef);
+        if (pawn == null)
+            return;
+
         GenSpawn.Spawn(pawn, spawnCell, map, WipeMode.Vanish);
         PostPawnSpawnMethod?.Invoke(null, new object[] { pawn });
     }
 
-    private static string LabelFor(PawnKindDef kindDef)
+    private static Pawn? GeneratePawn(PawnKindDef kindDef)
     {
-        return $"{kindDef.LabelCap.RawText} ({kindDef.defName})";
+        if (GeneratePawnMethod == null)
+            return null;
+
+        var parameters = GeneratePawnMethod.GetParameters();
+        var args = new object?[parameters.Length];
+        args[0] = kindDef;
+        args[1] = DefaultFactionFor(kindDef);
+
+        for (var i = 2; i < parameters.Length; i++)
+            args[i] = DefaultValueFor(parameters[i]);
+
+        return GeneratePawnMethod.Invoke(null, args) as Pawn;
+    }
+
+    private static Faction? DefaultFactionFor(PawnKindDef kindDef)
+    {
+        var factionDef = DefaultFactionTypeField?.GetValue(kindDef) as FactionDef;
+        return factionDef == null ? null : FactionUtility.DefaultFactionFrom(factionDef);
+    }
+
+    private static object? DefaultValueFor(ParameterInfo parameter)
+    {
+        if (parameter.HasDefaultValue)
+            return parameter.DefaultValue;
+
+        if (!parameter.ParameterType.IsValueType || Nullable.GetUnderlyingType(parameter.ParameterType) != null)
+            return null;
+
+        return Activator.CreateInstance(parameter.ParameterType);
     }
 }

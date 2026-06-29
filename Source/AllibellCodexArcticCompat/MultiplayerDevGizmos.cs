@@ -52,6 +52,6 @@ public static class MultiplayerDevGizmos
         if (pawn?.Dead != true)
             return;
 
-        ResurrectionUtility.TryResurrectWithSideEffects(pawn);
+        ResurrectionUtility.TryResurrect(pawn);
     }
 }

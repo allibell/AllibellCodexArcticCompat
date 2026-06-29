@@ -11,6 +11,11 @@ namespace AllibellCodex.ArcticCompat;
 [HarmonyPatch]
 public static class ResearchPalEnqueuePatch
 {
+    public static bool Prepare()
+    {
+        return ResearchPalCompat.ResearchPalLoaded;
+    }
+
     public static MethodBase? TargetMethod()
     {
         return AccessTools.Method("ResearchPal.Queue:Enqueue");
@@ -33,6 +38,11 @@ public static class ResearchPalEnqueuePatch
 [HarmonyPatch]
 public static class ResearchPalEnqueueRangePatch
 {
+    public static bool Prepare()
+    {
+        return ResearchPalCompat.ResearchPalLoaded;
+    }
+
     public static MethodBase? TargetMethod()
     {
         return AccessTools.Method("ResearchPal.Queue:EnqueueRange");
@@ -59,6 +69,11 @@ public static class ResearchPalEnqueueRangePatch
 [HarmonyPatch]
 public static class ResearchPalDequeuePatch
 {
+    public static bool Prepare()
+    {
+        return ResearchPalCompat.ResearchPalLoaded;
+    }
+
     public static MethodBase? TargetMethod()
     {
         return AccessTools.Method("ResearchPal.Queue:Dequeue");
@@ -84,6 +99,8 @@ public static class ResearchPalCompat
 
     [ThreadStatic]
     private static bool executingSyncedQueueCall;
+
+    public static bool ResearchPalLoaded => AccessTools.TypeByName("ResearchPal.Queue") != null;
 
     public static bool ShouldSyncQueueCall()
     {
