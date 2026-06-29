@@ -51,9 +51,11 @@ public static class ArcticCompatBootstrap
         RegisterSyncMethod(register, typeof(BillSearchDialog), nameof(BillSearchDialog.AddBillSynced));
         RegisterSyncMethod(register, typeof(MultiplayerDevActions), nameof(MultiplayerDevActions.SpawnPawnKindSynced), debugOnly: true);
         RegisterSyncMethod(register, typeof(MultiplayerDevGizmos), nameof(MultiplayerDevGizmos.ResurrectPawnSynced), debugOnly: true);
+        RegisterSyncMethod(register, typeof(MultiplayerDevGizmos), nameof(MultiplayerDevGizmos.ClearMentalStateSynced), debugOnly: true);
         RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.EnqueueSynced));
         RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.EnqueueRangeSynced));
         RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.DequeueSynced));
+        RegisterSRTSSyncMethods(register);
         RegisterWinstonWavesSyncMethods(register);
     }
 
@@ -105,6 +107,16 @@ public static class ArcticCompatBootstrap
         var rewardCreator = Type.GetType("VSEWW.RewardCreator, VSEWW");
         if (rewardCreator != null)
             RegisterSyncMethod(register, rewardCreator, "SendReward");
+    }
+
+    private static void RegisterSRTSSyncMethods(MethodInfo register)
+    {
+        if (!ModsConfig.IsActive("smashphil.srtsexpanded"))
+            return;
+
+        var launchable = Type.GetType("SRTS.CompLaunchableSRTS, SRTS");
+        if (launchable != null)
+            RegisterSyncMethod(register, launchable, "TryLaunch");
     }
 
     private static void ApplyWinstonWavesCompatibility()

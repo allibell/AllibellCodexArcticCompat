@@ -30,6 +30,9 @@ public static class PawnGetGizmosPatch
 
         if (Prefs.DevMode && __instance?.Dead == true)
             yield return MultiplayerDevGizmos.ResurrectCommand(__instance);
+
+        if (Prefs.DevMode && __instance?.InMentalState == true)
+            yield return MultiplayerDevGizmos.ClearMentalStateCommand(__instance);
     }
 }
 
@@ -47,11 +50,33 @@ public static class MultiplayerDevGizmos
         };
     }
 
+    public static Command_Action ClearMentalStateCommand(Pawn pawn)
+    {
+        return new Command_Action
+        {
+            defaultLabel = "MP DEV: end mental state",
+            defaultDesc = "End this pawn's current mental state through Multiplayer sync.",
+            icon = TexCommand.ClearPrioritizedWork,
+            action = () => ClearMentalStateSynced(pawn),
+            groupKey = 941650232
+        };
+    }
+
     public static void ResurrectPawnSynced(Pawn pawn)
     {
         if (pawn?.Dead != true)
             return;
 
         ResurrectionUtility.TryResurrect(pawn);
+    }
+
+    public static void ClearMentalStateSynced(Pawn pawn)
+    {
+        if (pawn?.InMentalState != true)
+            return;
+
+        pawn.MentalState?.RecoverFromState();
+        if (pawn.InMentalState)
+            pawn.mindState.mentalStateHandler.Reset();
     }
 }
