@@ -5,7 +5,6 @@
   <packageId>allibellcodex.arcticcompat</packageId>
   <supportedVersions>
     <li>1.5</li>
-    <li>1.6</li>
   </supportedVersions>
   <modDependencies>
     <li>
@@ -28,18 +27,15 @@
     <li>rwmt.multiplayer</li>
     <li>rwmt.multiplayercompatibility</li>
     <li>atlas.androidtiers</li>
-    <li>vanillaracesexpanded.android</li>
     <li>dubwise.dubsmintmenus</li>
     <li>unlimitedhugs.allowtool</li>
-    <li>brrainz.achtung</li>
+    <li>vanillaexpanded.vfecore</li>
     <li>vanillaexpanded.vanillatraitsexpanded</li>
     <li>dandman.grothingthings</li>
-    <li>vanillastorytellersexpanded.winstonwave</li>
-    <li>notfood.researchpal</li>
   </loadAfter>
   <description>
-Compatibility helper for Allibell's codex_arctic_2 mod list on RimWorld 1.6 multiplayer.
+Compatibility helper for Allibell and Fyrex's exact RimWorld 1.5 multiplayer mod list.
 
-This mod is intentionally separate from the installed Workshop mods. It applies conservative runtime compatibility settings for Android Tiers when enabled, and leaves the source mod files untouched.
+This mod is intentionally separate from the installed Workshop mods. It applies focused runtime compatibility patches for the current 1.5 list and leaves source Workshop files untouched.
   </description>
 </ModMetaData>

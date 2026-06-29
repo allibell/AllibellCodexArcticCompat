@@ -1,0 +1,74 @@
+RimWorld ACTIVE MOD LIST  (load order, top = loads first)
+Game version: 1.5.4409 rev1141
+Format:  #. packageId | Mod Name | WorkshopID(or Local/DLC)
+===========================================================================
+  1. zetrith.prepatcher                                 | Prepatcher                               | 2934420800
+  2. brrainz.harmony                                    | Harmony                                  | 2009463077
+  3. ludeon.rimworld                                    | RimWorld (Core - base game)              | Core
+  4. ludeon.rimworld.ideology                           | Ideology (official DLC)                  | Ideology
+  5. ludeon.rimworld.biotech                            | Biotech (official DLC)                   | Biotech
+  6. rwmt.multiplayer                                   | Multiplayer                              | 2606448745
+  7. dubwise.dubsbadhygiene                             | Dubs Bad Hygiene                         | 836308268
+  8. dubwise.dubscentralheating                         | Dubs Central Heating                     | 2619214952
+  9. dubwise.dubsmintmenus                              | Dubs Mint Menus                          | 1446523594
+ 10. dubwise.dubsmintminimap                            | Dubs Mint Minimap                        | 1662119905
+ 11. rwmt.multiplayercompatibility                      | Multiplayer Compatibility                | 1629973374
+ 12. unlimitedhugs.hugslib                              | HugsLib                                  | 818773962
+ 13. erdelf.humanoidalienraces                          | Humanoid Alien Races                     | 839005762
+ 14. carnysenpai.enableoversizedweapons                 | Enable Oversized Weapons                 | 2543371889
+ 15. atlas.androidtiers                                 | Android tiers (Unofficial 1.5 Update)    | 3270639973
+ 16. avilmask.commonsense                               | Common Sense                             | 1561769193
+ 17. oskarpotocki.vanillafactionsexpanded.core          | Vanilla Expanded Framework               | 2023507013
+ 18. vanillaexpanded.vfearchitect                       | Vanilla Furniture Expanded - Architect   | 2608762624
+ 19. gt.sam.tilledsoil                                  | Tilled Soil                              | 725747149
+ 20. mehni.pickupandhaul                                | Pick Up And Haul                         | 1279012058
+ 21. vanillaexpanded.vfesecurity                        | Vanilla Furniture Expanded - Security    | 1845154007
+ 22. xercaine.industrialage.artillery                   | Artillery Gun                            | 2481466772
+ 23. vanillaexpanded.vfecore                            | Vanilla Furniture Expanded               | 1718190143
+ 24. vanillaexpanded.vfeart                             | Vanilla Furniture Expanded - Art         | 1968134023
+ 25. vanillaexpanded.vfefarming                         | Vanilla Furniture Expanded - Farming     | 1957158779
+ 26. vanillaexpanded.vfemedical                         | Vanilla Furniture Expanded - Medical Module | 1718191613
+ 27. vanillaexpanded.vfepower                           | Vanilla Furniture Expanded - Power       | 2062943477
+ 28. vanillaexpanded.vfeproduction                      | Vanilla Furniture Expanded - Production  | 1880253632
+ 29. vanillaexpanded.vfepropsanddecor                   | Vanilla Furniture Expanded - Props and Decor | 2102143149
+ 30. jaxe.rimhud                                        | RimHUD                                   | 1508850027
+ 31. edb.preparecarefully                               | EdB Prepare Carefully                    | 735106432
+ 32. murmur.walllight                                   | Wall Light                               | 1423699208
+ 33. vanillaexpanded.vwe                                | Vanilla Weapons Expanded                 | 1814383360
+ 34. vanillaexpanded.vwec                               | Vanilla Weapons Expanded - Coilguns      | 2375692535
+ 35. vanillaexpanded.vweq                               | Vanilla Weapons Expanded - Quickdraw     | 1906780517
+ 36. vanillaexpanded.vwel                               | Vanilla Weapons Expanded - Laser         | 1989352844
+ 37. vanillaexpanded.vwehw                              | Vanilla Weapons Expanded - Heavy Weapons | 2329126791
+ 38. vanillaexpanded.vweft                              | Vanilla Weapons Expanded - Frontier      | 2454918139
+ 39. vanillaexpanded.vwems                              | Vanilla Weapons Expanded - Makeshift     | 2419690698
+ 40. vanillaexpanded.vwenl                              | Vanilla Weapons Expanded - Non-Lethal    | 2454918354
+ 41. vanillaexpanded.vwetb                              | Vanilla Weapons Expanded - Tribal        | 2454918552
+ 42. slabby.wallheater                                  | Wall Heater                              | 2298620806
+ 43. ogliss.thewhitecrayon.quarry                       | Quarry                                   | 2007576583
+ 44. roolo.runandgun                                    | RunAndGun                                | 1204108550
+ 45. weilbyte.snapout                                   | Snap Out!                                | 1319782555
+ 46. linkolas.stabilize                                 | Stabilize                                | 2023407836
+ 47. rimfridge.kv.rw                                    | RimFridge: Now with Shelves!             | 2898411376
+ 48. lwm.deepstorage                                    | LWM's Deep Storage                       | 3532608331
+ 49. unlimitedhugs.allowtool                            | Allow Tool                               | 761421485
+ 50. oblitus.housekeeperassistancecat                   | HousekeeperAssistanceCat                 | 1541620640
+ 51. hatti.qualitybuilder                               | QualityBuilder                           | 754637870
+ 52. uuugggg.replacestuff                               | Replace Stuff                            | 1372003680
+ 53. haplo.miscellaneous.training                       | Misc. Training                           | 717575199
+ 54. vanillaexpanded.vanillatraitsexpanded              | Vanilla Traits Expanded                  | 2296404655
+ 55. nephlite.orbitaltradecolumn                        | Utility Columns                          | 2013476665
+ 56. frozensnowfox.filthvanisheswithrainandtime         | [FSF] Filth Vanishes With Rain And Time  | 1508341791
+ 57. telkir.tmods.morefloors                            | [T] MoreFloors                           | 2878200208
+ 58. wemd.reinforceddoors                               | [WD] Reinforced Doors                    | 1857597307
+ 59. mlie.10xcarryingcapacity                           | 10x Carrying Capacity (Continued)        | 2019000693
+ 60. morph.advanceddoors                                | Advanced Doors                           | 2510735904
+ 61. alien.arasakacorporation                           | Arasaka Corporation                      | 2349566282
+ 62. mlie.autodoc                                       | Auto Doc (Continued)                     | 2899262327
+ 63. despenso.simpleresearchbench                       | Small Simple Research Bench              | 2147483288
+ 64. aleph.reinforcedwalls                              | Reinforced Walls Renewed                 | 3418368998
+ 65. unon.noburnmetal                                   | No Burn Metal                            | 1923990111
+ 66. dandman.grothingthings                             | GroThing                                 | 2976584286
+ 67. allibellcodex.arcticcompat                         | AllibellCodex Arctic Compatibility       | AllibellCodexArcticCompat
+ 68. fissure.bettergroundtextures                       | Better Ground Textures?                  | 2009702813
+===========================================================================
+Total active mods: 68

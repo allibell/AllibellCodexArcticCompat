@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>AllibellCodexArcticCompat</AssemblyName>
     <RootNamespace>AllibellCodex.ArcticCompat</RootNamespace>
-    <OutputPath>../../1.6/Assemblies</OutputPath>
+    <OutputPath>../../1.5/Assemblies</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4850" />
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4409" />
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
   </ItemGroup>
 

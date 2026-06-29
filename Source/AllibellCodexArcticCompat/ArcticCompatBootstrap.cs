@@ -16,7 +16,6 @@ public static class ArcticCompatBootstrap
         ApplyStep("Harmony patches", () => new Harmony("allibellcodex.arcticcompat").PatchAll());
         ApplyStep("multiplayer sync method registration", RegisterMultiplayerSyncMethods);
         ApplyStep("Android Tiers settings", ApplyAndroidTiersMultiplayerSettings);
-        ApplyStep("Winston Waves compatibility", ApplyWinstonWavesCompatibility);
     }
 
     private static void ApplyStep(string name, Action action)
@@ -48,15 +47,9 @@ public static class ArcticCompatBootstrap
         if (register == null)
             return;
 
-        RegisterSyncMethod(register, typeof(BillSearchDialog), nameof(BillSearchDialog.AddBillSynced));
         RegisterSyncMethod(register, typeof(MultiplayerDevActions), nameof(MultiplayerDevActions.SpawnPawnKindSynced), debugOnly: true);
         RegisterSyncMethod(register, typeof(MultiplayerDevGizmos), nameof(MultiplayerDevGizmos.ResurrectPawnSynced), debugOnly: true);
         RegisterSyncMethod(register, typeof(MultiplayerDevGizmos), nameof(MultiplayerDevGizmos.ClearMentalStateSynced), debugOnly: true);
-        RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.EnqueueSynced));
-        RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.EnqueueRangeSynced));
-        RegisterSyncMethod(register, typeof(ResearchPalCompat), nameof(ResearchPalCompat.DequeueSynced));
-        RegisterSRTSSyncMethods(register);
-        RegisterWinstonWavesSyncMethods(register);
     }
 
     private static void RegisterSyncMethod(MethodInfo register, Type type, string methodName, bool debugOnly = false)
@@ -85,68 +78,6 @@ public static class ArcticCompatBootstrap
         syncMethod.GetType()
             .GetMethod("SetDebugOnly", BindingFlags.Public | BindingFlags.Instance)
             ?.Invoke(syncMethod, Array.Empty<object>());
-    }
-
-    private static void RegisterWinstonWavesSyncMethods(MethodInfo register)
-    {
-        if (!ModsConfig.IsActive("vanillastorytellersexpanded.winstonwave"))
-            return;
-
-        var debugOptions = Type.GetType("VSEWW.DebugOptions, VSEWW");
-        if (debugOptions != null)
-        {
-            RegisterSyncMethod(register, debugOptions, "AddModifierToWave", debugOnly: true);
-            RegisterSyncMethod(register, debugOptions, "ResetToWaveOne", debugOnly: true);
-            RegisterSyncMethod(register, debugOptions, "ResetWave", debugOnly: true);
-            RegisterSyncMethod(register, debugOptions, "RewardTest", debugOnly: true);
-            RegisterSyncMethod(register, debugOptions, "SendAllReward", debugOnly: true);
-            RegisterSyncMethod(register, debugOptions, "SendWaveNow", debugOnly: true);
-            RegisterSyncMethod(register, debugOptions, "SkipToWave", debugOnly: true);
-        }
-
-        var rewardCreator = Type.GetType("VSEWW.RewardCreator, VSEWW");
-        if (rewardCreator != null)
-            RegisterSyncMethod(register, rewardCreator, "SendReward");
-    }
-
-    private static void RegisterSRTSSyncMethods(MethodInfo register)
-    {
-        if (!ModsConfig.IsActive("smashphil.srtsexpanded"))
-            return;
-
-        var launchable = Type.GetType("SRTS.CompLaunchableSRTS, SRTS");
-        if (launchable != null)
-            RegisterSyncMethod(register, launchable, "TryLaunch");
-    }
-
-    private static void ApplyWinstonWavesCompatibility()
-    {
-        if (!ModsConfig.IsActive("vanillastorytellersexpanded.winstonwave"))
-            return;
-
-        var winston = LoadedModManager.RunningModsListForReading
-            .FirstOrDefault(mod => string.Equals(mod.PackageId, "VanillaStorytellersExpanded.WinstonWave", StringComparison.OrdinalIgnoreCase));
-        if (winston?.ModMetaData?.IncompatibleWith == null)
-            return;
-
-        var removed = winston.ModMetaData.IncompatibleWith.RemoveAll(packageId =>
-            string.Equals(packageId, "rwmt.Multiplayer", StringComparison.OrdinalIgnoreCase));
-        if (removed > 0)
-            Log.Message($"{LogPrefix} Removed Winston Waves' stale Multiplayer incompatibility marker.");
-
-        RemoveWinstonNaturalGoodwillPatch();
-    }
-
-    private static void RemoveWinstonNaturalGoodwillPatch()
-    {
-        var patchType = Type.GetType("VanillaStorytellersExpanded.Patch_NaturalGoodwill, VanillaStorytellersExpanded");
-        var postfix = patchType?.GetMethod("Postfix", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-        var target = AccessTools.PropertyGetter(typeof(RimWorld.Faction), nameof(RimWorld.Faction.NaturalGoodwill));
-        if (postfix == null || target == null)
-            return;
-
-        new Harmony("allibellcodex.arcticcompat.winston").Unpatch(target, postfix);
-        Log.Message($"{LogPrefix} Disabled Winston Waves natural goodwill postfix for Multiplayer.");
     }
 
     private static void ApplyAndroidTiersMultiplayerSettings()

@@ -1,29 +1,35 @@
 # AllibellCodex Arctic Compatibility
 
-Standalone compatibility helper for Allibell's `codex_arctic_2` RimWorld mod list.
+Standalone compatibility helper for Allibell and Fyrex's exact RimWorld 1.5 multiplayer list.
 
-This mod is built for RimWorld 1.6 and is intentionally separate from installed Workshop mods. It does not overwrite files in Workshop or the RimWorld app bundle.
+This mod targets RimWorld `1.5.4409 rev1141`. It is intentionally separate from installed Workshop mods and does not overwrite Workshop files or the RimWorld app bundle.
 
-## Current behavior
+## Exact Target List
 
-- Loads after Multiplayer, Multiplayer Compatibility, Android Tiers, and selected higher-risk enabled mods.
-- If `atlas.androidtiers` is enabled, applies Multiplayer Compatibility's recommended Android Tiers settings at runtime:
+The current multiplayer list has 68 active entries. The important file-identity pins are:
+
+- `atlas.androidtiers` must be Workshop `3270639973` - Android tiers (Unofficial 1.5 Update).
+- `dandman.grothingthings` must be Workshop `2976584286` - GroThing.
+- `allibellcodex.arcticcompat` must be the local `AllibellCodexArcticCompat` folder or symlink from this repo.
+
+The active package ID order must match `docs/exact-active-mods-1.5.txt`.
+
+## Current Behavior
+
+- Applies Multiplayer Compatibility's recommended Android Tiers settings at runtime:
   - `disableLowNetworkMalusInCaravans = true`
   - `disableLowNetworkMalus = true`
   - `duringSolarFlaresAndroidsShouldBeDowned = false`
-- If GroThing is enabled without Vanilla Furniture Expanded's `MF_ModernFurniture` research project, removes that missing prerequisite from `GroThing Plants` so its research remains usable.
-- Adds a Multiplayer-synced dev mode action at `Spawning > MP spawn pawn kind` for spawning pawns such as huskies without using RimWorld's unsynced vanilla spawn command.
-- Adds a Multiplayer-synced `MP DEV: resurrect` dev gizmo on dead pawns/corpses; use this instead of the vanilla `DEV: resurrect` button in Multiplayer.
-- If Vanilla Storytellers Expanded - Winston Waves is enabled, removes its stale Multiplayer incompatibility marker, disables a null-prone natural goodwill postfix during Multiplayer loads, and syncs Winston's player-triggered reward and debug wave actions through Multiplayer.
-- If ResearchPal is enabled, syncs its research queue UI operations through Multiplayer using stable research def names.
+- Replaces known Android Tiers `System.Random` calls with RimWorld's synced `Verse.Rand` calls where this Android Tiers 1.5 build still exposes those methods.
+- If GroThing is enabled without Vanilla Furniture Expanded's `MF_ModernFurniture` research project, removes that missing prerequisite from `GroThing Plants`.
+- Adds a Multiplayer-synced dev mode action at `Spawning > MP spawn pawn kind` for spawning pawns without using RimWorld's unsynced vanilla spawn command.
+- Adds Multiplayer-synced dev gizmos:
+  - `MP DEV: resurrect`
+  - `MP DEV: end mental state`
 
-## Suggested load order
+Inactive-mod handlers from earlier experiments are deliberately not included.
 
-Place this after `rwmt.multiplayercompatibility`, Android Tiers, GroThing, Winston Waves, and ResearchPal.
-
-Do not use it as a replacement for `rwmt.multiplayercompatibility`; use both when playing Multiplayer.
-
-## Install or update on macOS
+## Install Or Update On macOS
 
 Run:
 
@@ -32,3 +38,19 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/allibell/AllibellCodexAr
 ```
 
 If RimWorld is installed in a non-default Steam library, set `RIMWORLD_MODS_DIR` to that `RimWorldMac.app/Mods` directory before running the script.
+
+## Multiplayer Setup Audit
+
+Before hosting or joining:
+
+```zsh
+./scripts/audit_rimworld_mp_setup.sh
+```
+
+The audit should report:
+
+- exact active order match
+- no missing active mods
+- no duplicate active package IDs
+- Android Tiers loaded from `3270639973`
+- GroThing loaded from `2976584286`
