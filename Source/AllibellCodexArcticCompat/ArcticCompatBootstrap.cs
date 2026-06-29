@@ -133,6 +133,20 @@ public static class ArcticCompatBootstrap
             string.Equals(packageId, "rwmt.Multiplayer", StringComparison.OrdinalIgnoreCase));
         if (removed > 0)
             Log.Message($"{LogPrefix} Removed Winston Waves' stale Multiplayer incompatibility marker.");
+
+        RemoveWinstonNaturalGoodwillPatch();
+    }
+
+    private static void RemoveWinstonNaturalGoodwillPatch()
+    {
+        var patchType = Type.GetType("VanillaStorytellersExpanded.Patch_NaturalGoodwill, VanillaStorytellersExpanded");
+        var postfix = patchType?.GetMethod("Postfix", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+        var target = AccessTools.PropertyGetter(typeof(RimWorld.Faction), nameof(RimWorld.Faction.NaturalGoodwill));
+        if (postfix == null || target == null)
+            return;
+
+        new Harmony("allibellcodex.arcticcompat.winston").Unpatch(target, postfix);
+        Log.Message($"{LogPrefix} Disabled Winston Waves natural goodwill postfix for Multiplayer.");
     }
 
     private static void ApplyAndroidTiersMultiplayerSettings()
